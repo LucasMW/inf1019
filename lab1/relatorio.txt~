@@ -1,0 +1,39 @@
+Relatório
+
+Q1)Faça um programa para criar dois processos, o pai escreve seu pid e espera o filho terminar e o filho escreve seu pid e termina.
+
+paiefilho.c
+-----------------------------------
+#include<stdio.h>
+#include <unistd.h>
+int main (void)
+{
+
+ printf("Eu sou o pai e meu pid é: %d\n", getpid());
+
+ if(fork()!=0)
+ 
+	printf("Eu sou o pai, esperando criar o filho. Meu pid: %d\n", getpid() );
+ else
+
+    printf("Eu sou o filho e meu pid é: %d\n" ,getpid() );
+
+return 0;
+}
+---------------------------------------------
+[yukon.grad.inf.puc-rio.br:~/inf1019/lab1] gcc -Wall -o pai paiefilho.c
+[yukon.grad.inf.puc-rio.br:~/inf1019/lab1] ./pai
+Eu sou o pai e meu pid é: 5963
+Eu sou o pai, esperando criar o filho. Meu pid: 5963
+Eu sou o filho e meu pid é: 5964
+
+
+C1)
+o getpid() retorna um int Progran ID. 
+O gcc compila um programa com getpid(), porém dá warning:
+paiefilho.c:4:2: warning: implicit declaration of function ‘getpid’ [-Wimplicit-function-declaration]
+  printf("Eu sou o pai e meu pid é: %d\n", getpid());
+o warning desaparece com a inclusão da linha #include <unistd.h> no código.
+
+Q2) Declarar uma variável visível ao pai e ao filho, inicializar com 1 e imprimir antes do fork()
+o filho alterou pra 5 e imprimir antes do 

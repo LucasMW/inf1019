@@ -1,0 +1,20 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#define EVER ;;
+int main (int argc, char** argv)
+{
+	unsigned int i=0;
+	double f=0;
+	for(EVER)
+	{
+	f+=1;
+	i++;
+	if(i%1000000==0)printf( "%u %f\n",i,f);	
+	
+	}
+	
+
+
+	return 0;
+}

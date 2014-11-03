@@ -1,0 +1,227 @@
+Exercícios threads LAB 6
+
+1) Implemente um programa que crie 2 threads:
+Uma delas (contCrescente) contará de 1 a N=20 (com
+pausas de T1=2 segundos) imprimindo o valor de
+contCrescente.
+A outra (contDecrescente) de M=30 a 1 (com pausas de
+T2=1 segundo) imprimindo o valor de contDecrescente.
+Compile com a opção -lpthread
+
+lab6.1.c
+----------------------------------------------
+#include <pthread.h>
+#include <stdio.h>
+#define NUM_THREADS 2
+#define M 30
+#define N 20
+
+void* ContCrescente ()
+{
+ 	int i;
+	for(i=0;i<N;i++)
+	{
+		printf("Ordem Crescente: %d\n",i+1);
+		sleep(2);
+	}
+	pthread_exit(NULL);
+}
+void* ContDecrescente()
+{
+int i;
+	for(i=M;i>0;i--)
+	{
+		printf("Ordem Decrescente: %d\n",i);
+		sleep(1);
+	}
+	pthread_exit(NULL);
+}
+int main(void)
+{
+	pthread_t threads[NUM_THREADS];
+	int t;
+
+
+
+	pthread_create(&threads[0], NULL, ContCrescente, (void *)0);
+	pthread_create(&threads[1], NULL, ContDecrescente, (void *)1);
+
+	for(t=0; t < NUM_THREADS; t++)
+	pthread_join(threads[t],NULL);
+/* espera pelo término de todas as threads*/
+	return 0;
+}
+---------------------------------------------------
+[c1310844@yukon lab6]$ gcc -o lab6.1 lab6.1.c -pthread
+[c1310844@yukon lab6]$ ./lab6.1
+Ordem Decrescente: 30
+Ordem Crescente: 1
+Ordem Decrescente: 29
+Ordem Crescente: 2
+Ordem Decrescente: 28
+Ordem Decrescente: 27
+Ordem Crescente: 3
+Ordem Decrescente: 26
+Ordem Decrescente: 25
+Ordem Crescente: 4
+Ordem Decrescente: 24
+Ordem Decrescente: 23
+Ordem Crescente: 5
+Ordem Decrescente: 22
+Ordem Decrescente: 21
+Ordem Crescente: 6
+Ordem Decrescente: 20
+Ordem Decrescente: 19
+Ordem Crescente: 7
+Ordem Decrescente: 18
+Ordem Decrescente: 17
+Ordem Crescente: 8
+Ordem Decrescente: 16
+Ordem Decrescente: 15
+Ordem Crescente: 9
+Ordem Decrescente: 14
+Ordem Decrescente: 13
+Ordem Crescente: 10
+Ordem Decrescente: 12
+Ordem Decrescente: 11
+Ordem Crescente: 11
+Ordem Decrescente: 10
+Ordem Decrescente: 9
+Ordem Crescente: 12
+Ordem Decrescente: 8
+Ordem Decrescente: 7
+Ordem Crescente: 13
+Ordem Decrescente: 6
+Ordem Decrescente: 5
+Ordem Crescente: 14
+Ordem Decrescente: 4
+Ordem Decrescente: 3
+Ordem Crescente: 15
+Ordem Decrescente: 2
+Ordem Decrescente: 1
+Ordem Crescente: 16
+Ordem Crescente: 17
+Ordem Crescente: 18
+Ordem Crescente: 19
+Ordem Crescente: 20
+----------------------------------------------------------------
+Acho que entendi como isso funciona
+
+2)Acrescente agora uma variável global inteira que é
+inicializada com zero e é incrementada e impressa na tela
+por cada thread.
+Verifique que ambas as threads manipulam a mesma
+variável.
+
+lab6.2.c
+-----------------------------------------------------------------
+#include <pthread.h>
+#include <stdio.h>
+#define NUM_THREADS 2
+#define M 30
+#define N 20
+static int increment=0;
+void* ContCrescente ()
+{
+ 	int i;
+	for(i=0;i<N;i++)
+	{
+		printf("Turn %d\tOrdem Crescente: %d\n",increment++,i+1);
+		sleep(2);
+	}
+	pthread_exit(NULL);
+}
+void* ContDecrescente()
+{
+int i;
+	for(i=M;i>0;i--)
+	{
+		printf("Turn %d\tOrdem Decrescente: %d\n",increment++,i);
+		sleep(1);
+	}
+	pthread_exit(NULL);
+}
+int main(void)
+{
+	pthread_t threads[NUM_THREADS];
+	int t;
+
+
+
+	pthread_create(&threads[0], NULL, ContCrescente, (void *)0);
+	pthread_create(&threads[1], NULL, ContDecrescente, (void *)1);
+
+	for(t=0; t < NUM_THREADS; t++)
+	pthread_join(threads[t],NULL);
+/* espera pelo término de todas as threads*/
+	return 0;
+}
+-------------------------------------------------------------
+[c1310844@yukon lab6]$ gcc -o lab6.2 lab6.2.c -pthread
+[c1310844@yukon lab6]$ ./lab6.2
+Turn 1	Ordem Decrescente: 30
+Turn 0	Ordem Crescente: 1
+Turn 2	Ordem Decrescente: 29
+Turn 3	Ordem Decrescente: 28
+Turn 4	Ordem Crescente: 2
+Turn 5	Ordem Decrescente: 27
+Turn 6	Ordem Crescente: 3
+Turn 7	Ordem Decrescente: 26
+Turn 8	Ordem Decrescente: 25
+Turn 9	Ordem Crescente: 4
+Turn 10	Ordem Decrescente: 24
+Turn 11	Ordem Decrescente: 23
+Turn 12	Ordem Crescente: 5
+Turn 13	Ordem Decrescente: 22
+Turn 14	Ordem Decrescente: 21
+Turn 15	Ordem Crescente: 6
+Turn 16	Ordem Decrescente: 20
+Turn 17	Ordem Decrescente: 19
+Turn 18	Ordem Crescente: 7
+Turn 19	Ordem Decrescente: 18
+Turn 20	Ordem Decrescente: 17
+Turn 21	Ordem Crescente: 8
+Turn 22	Ordem Decrescente: 16
+Turn 23	Ordem Decrescente: 15
+Turn 24	Ordem Crescente: 9
+Turn 25	Ordem Decrescente: 14
+Turn 26	Ordem Decrescente: 13
+Turn 27	Ordem Crescente: 10
+Turn 28	Ordem Decrescente: 12
+Turn 29	Ordem Decrescente: 11
+Turn 30	Ordem Crescente: 11
+Turn 31	Ordem Decrescente: 10
+Turn 32	Ordem Decrescente: 9
+Turn 33	Ordem Crescente: 12
+Turn 34	Ordem Decrescente: 8
+Turn 35	Ordem Decrescente: 7
+Turn 36	Ordem Crescente: 13
+Turn 37	Ordem Decrescente: 6
+Turn 38	Ordem Decrescente: 5
+Turn 39	Ordem Crescente: 14
+Turn 40	Ordem Decrescente: 4
+Turn 41	Ordem Decrescente: 3
+Turn 42	Ordem Crescente: 15
+Turn 43	Ordem Decrescente: 2
+Turn 44	Ordem Decrescente: 1
+Turn 45	Ordem Crescente: 16
+Turn 46	Ordem Crescente: 17
+Turn 47	Ordem Crescente: 18
+Turn 48	Ordem Crescente: 19
+Turn 49	Ordem Crescente: 20
+--------------------------------------
+Funciona!
+
+3) Usando threads, escreva um programa C que implemente o
+problema do produtor/consumidor. O produtor e o consumidor
+devem ser threads de execução dentro do mesmo processo
+compartilhando os recursos do processo (fila, semáforos e
+demais dados). O produtor deve produzir dados (números
+inteiros pseudo - aleatórios ) a cada 1 segundo colocando-os em
+uma fila (buffer). O consumidor deve retirar dados da fila a cada
+2 segundos. O tamanho máximo da fila deve ser de 8 elementos
+(MAXFILA) e tanto o produtor como o consumidor devem
+produzir/consumir 64 elementos (números inteiros de 1 a 64, por
+exemplo) evitando condições de corrida. Variáveis
+compartilhadas entre threads são simplesmente variáveis
+globais.

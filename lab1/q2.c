@@ -1,0 +1,25 @@
+
+#include<stdio.h>
+#include <unistd.h>
+
+int main (void)
+{
+
+int* visible;
+visible=(int*)malloc(sizeof(int));
+*visible=1;
+printf("var vale %d\n",*visible);
+	if(fork()!=0)
+	{
+     
+	}
+	else
+	{
+	*visible=5;
+	 printf("eu filho altero var para %d\n",*visible);
+	//exit(01);
+	}
+waitpid();
+printf("Eu sou o pai e mostro a var de novo : %d\n",*visible);
+return 0;
+}
