@@ -6,7 +6,8 @@
 
 union semun 
 {
-	int val; struct semid_ds *buf; ushort *array;
+	int val; 
+	struct semid_ds *buf; ushort *array;
 };
 
 // inicializa o valor do semáforo
@@ -31,12 +32,14 @@ int main (int argc, char * argv[])
 		letra = 'x'; 
 		sleep (2);
 	} 
-	else 
+	else /*./lab7.1 & */ 
 	{
-
+	  /* Espera o o mesmo semáforo ser criado */
 		while ((semId = semget (8752, 1, 0666)) < 0)
 		{
-			putchar ('.'); fflush(stdout); sleep (1);
+			putchar ('.'); 
+			fflush(stdout);
+			sleep (1);
 		}
 
 	}
@@ -46,7 +49,8 @@ int main (int argc, char * argv[])
 	{
 		semaforoP(semId); 
 		putchar (toupper(letra)); 
-		fflush(stdout); sleep (rand() %3);
+		fflush(stdout); 
+		sleep (rand() %3);
 		putchar (letra);
 		fflush(stdout);
 		semaforoV(semId);
