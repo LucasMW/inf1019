@@ -25,4 +25,45 @@ Pesquisar WSClock
 WSClock é um algoritmo de substituição de página.
 O algoritmo é a junção do algoritmo working set com a política clock
 Implementa lista circular de páginas(imitando um relógio clock)
-A lista começa vazia , e conforme as páginas são careregadas , forma-se um círculo.
+A lista começa vazia , e conforme as páginas são careregadas , forma-se um círculo. 
+A cada Page Fault:
+Dê uma Volta na lista
+ Examine o elemento corrente
+ Se o Bit R do elemento está setado (1)
+  /*Não remova*/
+  Des-sete o Bit R do elemento (mude para 0)
+  Elemento corrente avança. 
+  repetir o algoritmo.
+ Senão /* Bit R do elemento corrente está des-setado(0)
+  Se o bit M estiver dessetado e idade for maior do que a permetida pelo workingset
+   /* A página está limpa Não está no working set , mas há uma cópia no disco */
+   Substitua a página
+   Avance o elemento corrente
+  Senão 
+   /*a página está suja, e não ṕossui cópia válida no disco*/
+   Agenda escrita no disco
+   Elemento Corrente Avança
+Fim da volta
+Se deu uma volta completa e não subistituiu
+ Se uma ou mais escritas no discos foram agendadas
+  Dê outra volta
+  /* Uma hora o programa escreverá ela no disco e aquela página estará limpa */
+ Senão
+  /* nenhuma escrita foi agendada */
+  /* todas as páginas estão no working set */
+  Se Existe página limpa
+   Subsitituir qualquer página limpa
+  Senão
+   Escolher qualquer outra e escrever no disco
+Fim Algoritmo
+
+
+
+
+
+
+
+
+
+   
+ 
