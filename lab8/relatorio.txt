@@ -1,0 +1,23 @@
+
+Pesquisar e Explicar
+
+
+
+Pesquisar Anomalia de Belady
+
+A anomalia de Bélády é um comportamento inesperado da gerência de páginas (substituição de páginas). Ocorre no algoritmo FIFO. 
+A anomalia ocorre durante um page fault( Sistema de paginação: A memória é dividida em páginas, e as páginas ficam armazenadas em seções físicas da memória. Quando Uma página não é achada em nenhuma dessas seções(frames) se diz que ela é faltante (page fault) e ela precisa ser carregada do disco. Se uma Page fault ocorrer se todas os frames estão completamente preenchidos, precisa-se subistituir uma página que já esteja na memória pela que se quer carregar)
+
+Seria esperado que quanto maior a memória da máquina, menos page faults deveriam ocorrer.
+Bellady mostrou que esse comportamento não é absoluto, que há anomaliaias, isto é, pode-se aumentar a memória do computador e o número de page faults subir!
+Exemplo Usando 3 frames, estão ocorrendo 9 pagefaults. Usando 4 frames, ocorrem 10 pagefaults;
+
+
+Fontes:
+http://www.itnerante.com.br/profiles/blogs/sistemas-operacionais-anomalia-belady
+http://en.wikipedia.org/wiki/B%C3%A9l%C3%A1dy%27s_anomaly
+ 
+
+
+
+Pesquisar WSClock
