@@ -21,3 +21,8 @@ http://en.wikipedia.org/wiki/B%C3%A9l%C3%A1dy%27s_anomaly
 
 
 Pesquisar WSClock
+
+WSClock é um algoritmo de substituição de página.
+O algoritmo é a junção do algoritmo working set com a política clock
+Implementa lista circular de páginas(imitando um relógio clock)
+A lista começa vazia , e conforme as páginas são careregadas , forma-se um círculo.
