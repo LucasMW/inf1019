@@ -46,9 +46,11 @@ int LRU (int rPage)
 	LRU_Door=Closed; /* A porta deve ser fechada, LRU deve ser atomica */
 	r=search(fisMemPaginas,MEM_FRAMES,rPage);
 	if(r >= 0) //Found
-	{
+	{	
+		printf("Pagina esta na memoria\n");
 		/* Alterar Contadores
 		 Marcar Esta Página como Recentemente usada */
+		printf("Alterando contador da pagina %d, na posicao %d\n",rPage,r+1);
 		contadores[r]=time(NULL)-startTime; //Number of seconds since the start
 	}
 	else //Not Found
@@ -69,7 +71,7 @@ int LRU (int rPage)
 			pageFaults++;
 			r=menor(contadores,MEM_FRAMES); //minor value =>Least Recently Used
 			r=search(contadores,MEM_FRAMES,r);//Ache o índice do 1º menor valor
-			printf("Substitui pagina %d na posicao %d por pagina %d",fisMemPaginas[r],r+1,rPage);
+			printf("Substitui pagina %d na posicao %d por pagina %d\n",fisMemPaginas[r],r+1,rPage);
 			fisMemPaginas[r]=rPage; /* subistitui */
 			contadores[r]=contadores[r]=time(NULL)-startTime; //Update time
 		}
