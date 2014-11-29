@@ -1,6 +1,7 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #define NUM_THREADS 16
 #define DeathTime 5 //Todos os threads executam 5 vezes e morrem
 #define MEM_FRAMES 16
@@ -8,6 +9,9 @@
 int fisMemPaginas[MEM_FRAMES]; //Tem a identificacao das paginas que tao na memoria
 int threadNames[NUM_THREADS];
 int contadores[MEM_FRAMES];
+int pageFaults=0; //PageFaults Explícitos
+int entradasDePagina=0; // Contagem separada para quando a página é carregada em espaço livre
+int startTime; //Time application started
 typedef enum 
 { 
   Open,
@@ -34,12 +38,32 @@ int LRU (int rPage)
 	{
 		/* Alterar Contadores
 		 Marcar Esta Página como Recentemente usada */
+		contadores[r]++;
 	}
 	else //Not Found
 	{
+		printf("Pagina nao esta na memoria\n");
 		/* Page Fault Sequence */
-
+		r=search(fisMemPaginas,MEM_FRAMES,(int)-1); //procure um espaço vazio
+		if(r>=0)
+		{
+			printf("Ocupando um espaço vazio\n");
+			fisMemPaginas[r]=rPage; //Esta Página ocupará a vazia
+			entradasDePagina++;
+		}
+		else //Significa que nao há espaço vazio para ocupar
+		{  /* Page Fault Count */
+			printf("Page Fault\n");
+			pageFaults++;
+		}
+		
 	}
+	printf("< ");
+	for(i=0;i<MEM_FRAMES;i++)
+	{
+		printf("%d ",fisMemPaginas[i]);	
+	}
+	printf(">\n");
 	LRU_Door=Open; /* Liberado */
 	return 1; // LRU Executed
 
@@ -85,7 +109,7 @@ int main(void)
 	
 	pthread_t threads[NUM_THREADS];
 	int t;
-	
+			
 	/* General initializations */ 
 	for(t=0;t<MEM_FRAMES;t++)
 	{
@@ -95,7 +119,7 @@ int main(void)
 	{
 	threadNames[t]=0; //No Id
 	}
-	
+	startTime=(int)time(NULL); //t0 antes dos threads serem gerados
 	/* Crie o Thread a cada 5 Segundos */
 	for(t=0; t < NUM_THREADS; t++)
     {
@@ -109,5 +133,7 @@ int main(void)
 	for(t=0; t < NUM_THREADS; t++)
 	pthread_join(threads[t],NULL);
 /* espera pelo término de todas as threads*/
+
+	printf("PageFaults: %d;\nSendo %d entradas de pagina em espaço livre e %d substituicoes de pagina\n",pageFaults+entradasDePagina,entradasDePagina,pageFaults);
 	return 0;
 }
