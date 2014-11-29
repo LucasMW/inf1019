@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <limits.h>
 #define NUM_THREADS 16
 #define DeathTime 5 //Todos os threads executam 5 vezes e morrem
 #define MEM_FRAMES 16
@@ -26,6 +27,14 @@ int search(int * vector,int limit,int element)
 
 	return -1; //Not Found	
 }
+int menor(int * vector,int limit)
+{
+	int i,save=INT_MAX;
+	for(i=0;i<limit;i++)
+		if(vector[i]<save)
+			save=vector[i];
+	return save;
+}
 int LRU (int rPage)
 {	
 	int i;
@@ -38,7 +47,7 @@ int LRU (int rPage)
 	{
 		/* Alterar Contadores
 		 Marcar Esta Página como Recentemente usada */
-		contadores[r]++;
+		contadores[r]=time(NULL)-startTime; //Number of seconds since the start
 	}
 	else //Not Found
 	{
@@ -50,11 +59,17 @@ int LRU (int rPage)
 			printf("Ocupando um espaço vazio\n");
 			fisMemPaginas[r]=rPage; //Esta Página ocupará a vazia
 			entradasDePagina++;
+			contadores[r]=contadores[r]=time(NULL)-startTime; //Number of seconds since the start
 		}
 		else //Significa que nao há espaço vazio para ocupar
 		{  /* Page Fault Count */
 			printf("Page Fault\n");
 			pageFaults++;
+			r=menor(contadores,MEM_FRAMES); //minor value =>Least Recently Used
+			r=search(contadores,MEM_FRAMES,r);//Ache o índice do 1º menor valor
+			printf("Substitui pagina %d na posicao %d por pagina %d",fisMemPaginas[r],r+1,rPage);
+			fisMemPaginas[r]=rPage; /* subistitui */
+			contadores[r]=contadores[r]=time(NULL)-startTime; //Update time
 		}
 		
 	}
