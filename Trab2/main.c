@@ -6,7 +6,9 @@
 #define NUM_THREADS 16
 #define DeathTime 5 //Todos os threads executam 5 vezes e morrem
 #define MEM_FRAMES 16
-
+#define ON 1
+#define OFF 0
+#define SHOW_CONTADORES ON
 int fisMemPaginas[MEM_FRAMES]; //Tem a identificacao das paginas que tao na memoria
 int threadNames[NUM_THREADS];
 int contadores[MEM_FRAMES];
@@ -78,7 +80,16 @@ int LRU (int rPage)
 	{
 		printf("%d ",fisMemPaginas[i]);	
 	}
-	printf(">\n");
+	printf(">\t PageFrames\n");
+	if(SHOW_CONTADORES)
+	{	
+		printf("< ");
+		for(i=0;i<MEM_FRAMES;i++)
+		{
+			printf("%d ",contadores[i]);	
+		}
+		printf(">\t Contadores\n");
+	}
 	LRU_Door=Open; /* Liberado */
 	return 1; // LRU Executed
 
